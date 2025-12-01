@@ -133,7 +133,7 @@
   <SubComponents>
     <Component class="javax.swing.JLabel" name="lblClave">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Clave: "/>
+        <Property name="text" type="java.lang.String" value="Clave:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="lblNombre">

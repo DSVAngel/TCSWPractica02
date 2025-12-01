@@ -13,34 +13,23 @@ public class DAOEmpleado implements IDAOGeneral<PojoEmpleado, Long> {
 
     @Override
     public boolean guardar(PojoEmpleado pojo) {
-        ConexionDB con = ConexionDB.getInstance();
-        TransactionDB t = new TransactionDB<PojoEmpleado>(pojo) {
+        String sql = "INSERT INTO empleados2 (clave, nombre, direccion, telefono) "
+                + "VALUES (?, ?, ?, ?)";
 
-            @Override
-            public boolean execute(Connection con) {
-                try {
-                    String sql = "insert into empleados2 (clave, nombre, direccion, telefono)"
-                            + "values (?,?,?,?)";
-                    PreparedStatement pst = con.prepareStatement(sql);
-                    pst.setLong(1, pojoDB.getClave());
-                    pst.setString(2, pojoDB.getNombre());
-                    pst.setString(3, pojoDB.getDireccion());
-                    pst.setString(4, pojoDB.getTelefono());
-                    pst.execute();
-                    return true;
-                } catch (SQLException ex) {
-                    Logger.getLogger(DAOEmpleado.class.getName()).log(Level.SEVERE, null, ex);
-                    return false;
-                }
-            }
-        };
-        return con.execute(t);
+        try (Connection con = ConexionDB.getInstance().getConnection(); PreparedStatement pst = con.prepareStatement(sql)) {
 
-//        String sql = "insert into empleados2 (clave, nombre, direccion, telefono)"
-//                + "values ('" + pojo.getClave() + "','" + pojo.getNombre() + "','" + pojo.getDireccion() + "','" + pojo.getTelefono() + "')";
-//
-//        ConexionDB con = ConexionDB.getInstance();
-//        return con.exectute(sql);
+            pst.setLong(1, pojo.getClave());
+            pst.setString(2, pojo.getNombre());
+            pst.setString(3, pojo.getDireccion());
+            pst.setString(4, pojo.getTelefono());
+
+            int filas = pst.executeUpdate();
+            return filas > 0;
+
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOEmpleado.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
     }
 
     @Override
@@ -49,20 +38,23 @@ public class DAOEmpleado implements IDAOGeneral<PojoEmpleado, Long> {
 
         String sql = "DELETE FROM empleados2 WHERE clave = ?";
 
-            try (Connection conn = (Connection) ConexionDB.getInstance(); PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = (Connection) ConexionDB.getInstance(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setLong(1, id);
             int filas = ps.executeUpdate();
 
             if (filas > 0) {
-                Logger.getLogger(DAOEmpleado.class.getName())
+                Logger.getLogger(DAOEmpleado.class
+                        .getName())
                         .log(Level.INFO, "Empleado eliminado");
                 return pojo;
             } else {
                 return null;
+
             }
         } catch (SQLException e) {
-            Logger.getLogger(DAOEmpleado.class.getName())
+            Logger.getLogger(DAOEmpleado.class
+                    .getName())
                     .log(Level.SEVERE, "Error eliminando empleado", e);
             return null;
         }
@@ -86,15 +78,18 @@ public class DAOEmpleado implements IDAOGeneral<PojoEmpleado, Long> {
             int filas = ps.executeUpdate();
 
             if (filas > 0) {
-                Logger.getLogger(DAOEmpleado.class.getName())
+                Logger.getLogger(DAOEmpleado.class
+                        .getName())
                         .log(Level.INFO, "Empleado actualizado");
                 return findByID(id); // Devuelve el registro ya modificado
             } else {
                 return null; // No se actualizó ninguna fila
+
             }
 
         } catch (SQLException e) {
-            Logger.getLogger(DAOEmpleado.class.getName())
+            Logger.getLogger(DAOEmpleado.class
+                    .getName())
                     .log(Level.SEVERE, "Error al actualizar el empleado", e);
             return null;
         }
@@ -118,11 +113,13 @@ public class DAOEmpleado implements IDAOGeneral<PojoEmpleado, Long> {
                     return pojo;
                 } else {
                     return null; // No hay registro con ese id
+
                 }
             }
 
         } catch (SQLException ex) {
-            Logger.getLogger(DAOEmpleado.class.getName())
+            Logger.getLogger(DAOEmpleado.class
+                    .getName())
                     .log(Level.SEVERE, "Error buscando empleado por ID", ex);
             return null;
         }
@@ -146,7 +143,8 @@ public class DAOEmpleado implements IDAOGeneral<PojoEmpleado, Long> {
             return lista;
 
         } catch (SQLException ex) {
-            Logger.getLogger(DAOEmpleado.class.getName())
+            Logger.getLogger(DAOEmpleado.class
+                    .getName())
                     .log(Level.SEVERE, "Error al listar empleados", ex);
             return null;
         }

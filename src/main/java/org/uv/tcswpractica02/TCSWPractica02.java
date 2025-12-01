@@ -138,17 +138,3 @@ public class TCSWPractica02 {
     }
 }
 
-/*
-ControllerMensaje controller = new ControllerMensaje();
-IMensaje msg = new SaludoI();
-controller.mostrar(new SaludoI());
-controller.mostrar(new DespedidaI());
-controller.mostrar(msg);
-
-controller.mostrar( new IMensaje()){
-@Override
-public void imprimir(){
-    Logger.getLogger(IMensaje.class.getName()).log(Level.INFO,"Otro...");
-}};
-
-*/

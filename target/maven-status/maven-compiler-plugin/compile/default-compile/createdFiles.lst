@@ -13,7 +13,6 @@ org/uv/tcswpractica02/Principal$2.class
 org/uv/tcswpractica02/Mensaje.class
 org/uv/tcswpractica02/ConexionDB.class
 org/uv/tcswpractica02/EmpleadosGUI$4.class
-org/uv/tcswpractica02/DAOEmpleado$1.class
 org/uv/tcswpractica02/EmpleadosGUI$3.class
 org/uv/tcswpractica02/Principal$3.class
 org/uv/tcswpractica02/ControllerMensaje.class

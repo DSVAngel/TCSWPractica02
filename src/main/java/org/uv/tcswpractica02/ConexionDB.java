@@ -47,7 +47,16 @@ public class ConexionDB {
         } catch (SQLException ex) {
             Logger.getLogger(ConexionDB.class.getName()).log(Level.SEVERE, null, ex);
             return false;
+        } finally {
+            try {
+                if (st != null) {
+                    st.close();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(ConexionDB.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
+
     }
 
     public ResultSet select(String sql) {
@@ -58,15 +67,15 @@ public class ConexionDB {
         } catch (SQLException ex) {
             Logger.getLogger(ConexionDB.class.getName()).log(Level.SEVERE, null, ex);
             return null;
-//        } finally {
-//            try {
-//                if (st != null) {
-//                    st.close();
-//                }
-//            } catch (SQLException ex) {
-//                Logger.getLogger(ConexionDB.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//        }
+        } finally {
+            try {
+                if (st != null) {
+                    st.close();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(ConexionDB.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
         }
     }
 

@@ -57,7 +57,7 @@ public class EmpleadosGUI extends javax.swing.JInternalFrame {
         setMinimumSize(new java.awt.Dimension(650, 450));
         setPreferredSize(new java.awt.Dimension(650, 450));
 
-        lblClave.setText("Clave: ");
+        lblClave.setText("Clave:");
 
         lblNombre.setText("Nombre:");
 
@@ -221,7 +221,7 @@ public class EmpleadosGUI extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(null, "Empleado eliminado");
                 JOptionPane.showMessageDialog(null, empleado);
             } else {
-                JOptionPane.showMessageDialog(null, "Error");
+                JOptionPane.showMessageDialog(null, "Error al eliminar");
             }
 
         }
@@ -229,30 +229,49 @@ public class EmpleadosGUI extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnBuscarIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarIDActionPerformed
-        String clave = txtClave.getText().trim();
-        try {
-            if (clave == null || clave.trim().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Se necesita la clave para buscar al empleado");
-            } else {
-                String sql = " Select * from empleados2 where "
-                        + " clave='" + clave + "'";
-                ConexionDB con = ConexionDB.getInstance();
-                ResultSet res = con.select(sql);
-                if (res.next()) {
-                    PojoEmpleado pojo = new PojoEmpleado();
-                    pojo.setClave(res.getLong("Clave"));
-                    pojo.setNombre(res.getString("Nombre"));
-                    pojo.setDireccion(res.getString("Direccion"));
-                    pojo.setTelefono(res.getString("Telefono"));
-                    String empleado = "Clave: " + pojo.getClave() + "\nNombre: " + pojo.getNombre() + "\nDireccion: " + pojo.getDireccion() + "\nTelefono: " + pojo.getTelefono();
-                    JOptionPane.showMessageDialog(rootPane, empleado);
-                } else {
-                    JOptionPane.showMessageDialog(null, "Error");
-                }
-            }
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(rootPane, ex);
+        String claveTxt = txtClave.getText().trim();
+
+        if (claveTxt.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                    "Se necesita la clave para buscar al empleado",
+                    "Advertencia",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
         }
+
+        long clave;
+
+        try {
+            clave = Long.parseLong(claveTxt);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this,
+                    "La clave debe ser un número válido",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        PojoEmpleado pojo = dao.findByID(clave);
+
+        if (pojo != null) {
+            String empleado = "Clave: " + pojo.getClave()
+                    + "\nNombre: " + pojo.getNombre()
+                    + "\nDirección: " + pojo.getDireccion()
+                    + "\nTeléfono: " + pojo.getTelefono();
+
+            JOptionPane.showMessageDialog(this,
+                    empleado,
+                    "Empleado encontrado",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "No se encontró un empleado con esa clave",
+                    "Resultado",
+                    JOptionPane.WARNING_MESSAGE);
+        }
+
+
     }//GEN-LAST:event_btnBuscarIDActionPerformed
 
     private void btnBuscarTodoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarTodoActionPerformed
